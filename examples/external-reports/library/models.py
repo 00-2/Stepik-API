@@ -44,7 +44,7 @@ class ExternalCourseReport:
             try:
                 timestamp = time.mktime(datetime.datetime.strptime(date.split('+')[0], '%Y-%m-%d').timetuple())
                 self.from_date = int(timestamp)
-            except ValueError:
+            except OverflowError:
                 print('data {} does not match format YYYY-MM-DD, default 1970-01-01'. format(date))
                 self.from_date = 0
 
@@ -60,13 +60,14 @@ class ExternalCourseReport:
                 shutil.copytree(base + self.default_project_folder, full_directory)
 
             self.generate_latex_report(full_directory + '/generated/', cached=cached)
+            print(full_directory)
             self.compile_latex_report(full_directory)
 
     def generate_latex_report(self, directory, cached=True):
         pass
 
     def compile_latex_report(self, directory):
-        latex_command = 'pdflatex -synctex=1 -interaction=nonstopmode {}.tex'.format(self.default_report_name)
+        latex_command = 'C:/Users/4444/AppData/Local/Programs/MiKTeX/miktex/bin/x64/pdflatex.exe -synctex=1 -interaction=nonstopmode {}.tex'.format(self.default_report_name)
 
         # Launch LaTeX three times
         os.chdir(directory)
@@ -85,7 +86,7 @@ class ItemReport(ExternalCourseReport):
     course_project_folder = 'course-{}-item'
     course_report_name = 'course-{}-item-report'
 
-    def generate_latex_report(self, directory, cached=True):
+    def generate_latex_report(self, directory, cached=False):
         course_id = self.course_id
         course_info = fetch_objects('courses', pk=course_id)
         course_title = course_info[0]['title']
@@ -94,7 +95,7 @@ class ItemReport(ExternalCourseReport):
             info_file.write('\\def\\coursetitle{{{}}}\n\\def\\courseurl{{{}}}\n'.format(course_title, course_url))
 
         course_structure_filename = 'cache/course-{}-structure.csv'.format(course_id)
-        if os.path.isfile(course_structure_filename) and cached:
+        if os.path.isfile(course_structure_filename) and False:
             course_structure = pd.read_csv(course_structure_filename)
         else:
             course_structure = get_course_structure(course_id)
@@ -104,10 +105,11 @@ class ItemReport(ExternalCourseReport):
         course_structure['step_variation'] += 1
 
         submissions_filename = 'cache/course-{}-submissions.csv'.format(course_id)
-        if os.path.isfile(submissions_filename) and cached:
+        if os.path.isfile(submissions_filename) and False:
             submissions = pd.read_csv(submissions_filename)
         else:
             submissions = get_course_submissions(course_id, course_structure)
+            print(submissions['reply'])
             submissions.to_csv(submissions_filename, index=False)
         submissions = submissions[submissions.submission_time >= self.from_date]
 
@@ -128,6 +130,7 @@ class ItemReport(ExternalCourseReport):
                                            lambda x: int('wrong' not in x.tolist()), 'submission_time')
 
             item_statistics = get_item_statistics(answers)
+            print('item_stat:', item_statistics)
             if item_statistics.empty:
                 return
 

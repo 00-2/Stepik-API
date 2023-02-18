@@ -40,7 +40,7 @@ def process_step_url(row):
 def get_course_structure(course_id, cached=True, token=None):
     # use cache
     course_structure_filename = 'cache/course-{}-structure.csv'.format(course_id)
-    if os.path.isfile(course_structure_filename) and cached:
+    if os.path.isfile(course_structure_filename) and False:
         course_structure = pd.read_csv(course_structure_filename)
         return course_structure
 
@@ -102,7 +102,7 @@ def get_course_submissions(course_id, course_structure=pd.DataFrame(), cached=Tr
 
     # use cache
     course_submissions_filename = 'cache/course-{}-submissions.csv'.format(course_id)
-    if os.path.isfile(course_submissions_filename) and cached:
+    if os.path.isfile(course_submissions_filename) and False:
         course_submissions = pd.read_csv(course_submissions_filename)
         course_submissions = course_submissions[header]
         return course_submissions
@@ -116,6 +116,9 @@ def get_course_submissions(course_id, course_structure=pd.DataFrame(), cached=Tr
     course_submissions = pd.DataFrame()
     for step in course_structure.step_id.unique().tolist():
         step_submissions = pd.DataFrame(fetch_objects('submissions', token=token, step=step))
+        for submission in step_submissions.values:
+            print(submission)
+        input()
         if step_submissions.empty:
             continue
 

@@ -1,0 +1,127 @@
+
+\newpage
+\stepurl{https://stepik.org/lesson/667378/step/4}
+\stepstatistics{2761002}{0.68}{0.95}{0.68}{38}{code}
+
+\begin{question}
+\hypertarget{ux43fux435ux440ux435ux445ux432ux430ux442-ux432ux440ux430ux436ux435ux441ux43aux438ux445-ux43fux43bux430ux43dux43eux432}{%
+\subsection{Перехват вражеских
+планов}\label{ux43fux435ux440ux435ux445ux432ux430ux442-ux432ux440ux430ux436ux435ux441ux43aux438ux445-ux43fux43bux430ux43dux43eux432}}
+
+Выполняя задание Центра, Штирлиц остался один в кабинете Мюллера. В
+бумагах группенфюрера разведчик обнаружил описание шифровки,
+используемой фашистами для описания перемещений своих войск. Они шифруют
+цифры, пробелы, точки и дефисы в виде двухэтажных сообщений, в которых
+каждый символ занимает две соседние строки. В ширину каждый символ может
+кодироваться количеством символов от 1 до 3. Таблица, которую нашёл
+Штирлиц, показана ниже.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\centering\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+Шифр
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Символ
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Примечание
+\end{minipage} \\
+\midrule
+\endhead
+\texttt{\textbar{}\ \ \ \ \ \ \ \ \ \ \ \ \ \textbar{}} & 1 & ~ \\
+\texttt{\^{}\textbar{}\ \ \ \ \ \ \ \ \ \ \ \ \ /\_} & 2 & ~ \\
+\texttt{\_)\ \ \ \ \ \ \ \ \ \ \ \ \ \_)} & 3 & ~ \\
+\texttt{\textbar{}\_\textbar{}\ \ \ \ \ \ \ \ \ \ \ \ \ ~\ \textbar{}} &
+4 & Шифр в 3 символа в ширину \\
+\texttt{\textbar{}-\ \ \ \ \ \ \ \ \ \ \ \ \ \_)} & 5 & ~ \\
+\texttt{/\ \ \ \ \ \ \ \ \ \ \ \ \ ()} & 6 & ~ \\
+\texttt{\textasciitilde{}/\ \ \ \ \ \ \ \ \ \ \ \ \ /} & 7 & ~ \\
+\texttt{()\ \ \ \ \ \ \ \ \ \ \ \ \ ()} & 8 & ~ \\
+\texttt{()\ \ \ \ \ \ \ \ \ \ \ \ \ ~/} & 9 & ~ \\
+\texttt{/\textbackslash{}\ \ \ \ \ \ \ \ \ \ \ \ \ \textbackslash{}/} &
+0 & ~ \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\hfill\break
+\texttt{.}\strut
+\end{minipage} & . & Вверху пробел, внизу точка \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\texttt{\_}\strut \\
+\hspace*{0.333em}\strut
+\end{minipage} & - & Вверху знак подчёркивания, внизу пробел - кодирует
+минус \\
+\begin{minipage}[t]{\linewidth}\raggedright
+\texttt{~}\strut \\
+\hspace*{0.333em}\strut
+\end{minipage} & ~ & Пробел сверху и снизу кодирует пробел \\
+\bottomrule
+\end{longtable}
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+~
+
+Напишите программу, которая будет преобразовывать фашистский шифр в
+обычные строки.
+
+\textbf{Входные данные:}
+
+Вводится две строки, в первой из которых хранится верхняя часть
+зашифрованного сообщения, а во второй - нижняя часть. Если строки имеют
+разную длину, то считается, что длина всей шифровки - это длина более
+короткой строки, т.е. лишний суффикс одной из строк игнорируется. Длина
+каждой из строк не превышает 10\textsuperscript{6}.
+
+\textbf{Выходные данные:}
+
+Расшифрованная строка. Если строку расшифровать не удалось, программа
+должна вывести NICHT.
+
+\end{question}

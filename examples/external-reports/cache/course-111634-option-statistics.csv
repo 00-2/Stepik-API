@@ -1,0 +1,10 @@
+step_id,is_multiple,is_correct,option_id,option_name
+2885233,False,False,1,ИСТ-021
+2885233,False,True,2,ИСТ-022
+2885233,False,False,3,ИСТ-023
+2885233,False,False,4,ИСТ-121
+2885233,False,False,5,ИСТ-122
+2885233,False,False,6,ИСТ-123
+2885233,False,False,7,ИСТ-921
+2885233,False,False,8,ИСТ-922
+2885233,False,False,9,ИСТ-923

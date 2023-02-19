@@ -113,12 +113,12 @@ def get_course_submissions(course_id, course_structure=pd.DataFrame(), cached=Tr
     if course_structure.empty:
         course_structure = get_course_structure(course_id, token)
 
-    course_submissions = pd.DataFrame()
+    course_submissions = []
     for step in course_structure.step_id.unique().tolist():
         step_submissions = pd.DataFrame(fetch_objects('submissions', token=token, step=step))
-        for submission in step_submissions.values:
-            print(submission)
-        input()
+        # for submission in step_submissions.values:
+        #     print(submission)
+
         if step_submissions.empty:
             continue
 
@@ -132,18 +132,16 @@ def get_course_submissions(course_id, course_structure=pd.DataFrame(), cached=Tr
                                                       'status': 'attempt_status'})
         step_submissions = pd.merge(step_submissions, step_attempts, on='attempt_id')
         step_submissions['step_id'] = step
-        course_submissions = course_submissions.append(step_submissions)
+        # sort step_submission
+        step_submissions = step_submissions.sort_values(['score', 'attempt_status'])
+        # drop duplicates
+        step_submissions = step_submissions.drop_duplicates(subset='user', keep="last")
+        # change indicies
+        step_submissions = step_submissions.set_index('user')
 
-    if course_submissions.empty:
-        return pd.DataFrame(columns=header)
-
-    course_submissions['submission_time'] = course_submissions['submission_time'].apply(get_unix_date)
-    course_submissions['attempt_time'] = course_submissions['attempt_time'].apply(get_unix_date)
-
-    course_submissions = course_submissions.rename(columns={'user': 'user_id'})
-    course_submissions = course_submissions[header]
-    course_submissions.to_csv(course_submissions_filename, index=False)
+        course_submissions.append(step_submissions)
     return course_submissions
+
 
 
 def get_course_grades(course_id, cached=True, token=None):

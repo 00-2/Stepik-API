@@ -14,6 +14,7 @@ from library.utils import (html2latex, create_answer_matrix, get_course_structur
                            get_item_statistics, get_question, process_step_url, process_options_with_name,
                            get_video_peaks, get_video_stats, get_unix_date, get_course_grades)
 
+COURSE_ID = 111634
 
 class ExternalCourseReport:
     default_project_folder = 'default'
@@ -34,34 +35,18 @@ class ExternalCourseReport:
         return parser
 
     def build(self):
-        args = self.get_parser().parse_args()
 
-        if args.course:
-            self.course_id = args.course
-            cached = not bool(args.nocache)
-            update = bool(args.update)
-            date = args.date if args.date else '1970-01-01'
-            try:
-                timestamp = time.mktime(datetime.datetime.strptime(date.split('+')[0], '%Y-%m-%d').timetuple())
-                self.from_date = int(timestamp)
-            except OverflowError:
-                print('data {} does not match format YYYY-MM-DD, default 1970-01-01'. format(date))
-                self.from_date = 0
 
-            print('Course {} processing...'.format(self.course_id))
+        print('Course {} processing...'.format(self.course_id))
 
-            base = 'latex/'
-            directory_name = self.course_project_folder.format(self.course_id)
-            full_directory = base + directory_name
+        base = 'latex/'
+        directory_name = self.course_project_folder.format(self.course_id)
+        full_directory = base + directory_name
 
-            if update and os.path.exists(full_directory):
-                shutil.rmtree(full_directory)
-            if not os.path.exists(full_directory):
-                shutil.copytree(base + self.default_project_folder, full_directory)
 
-            self.generate_latex_report(full_directory + '/generated/', cached=cached)
-            print(full_directory)
-            self.compile_latex_report(full_directory)
+
+        submissions = self.generate_latex_report(full_directory + '/generated/', cached=False)
+        return submissions
 
     def generate_latex_report(self, directory, cached=True):
         pass
@@ -86,8 +71,10 @@ class ItemReport(ExternalCourseReport):
     course_project_folder = 'course-{}-item'
     course_report_name = 'course-{}-item-report'
 
+    def __init__(self, course_id):
+        self.course_id = course_id
     def generate_latex_report(self, directory, cached=False):
-        course_id = self.course_id
+        course_id = COURSE_ID
         course_info = fetch_objects('courses', pk=course_id)
         course_title = course_info[0]['title']
         course_url = '{}/course/{}'.format(API_HOST, course_id)
@@ -103,21 +90,8 @@ class ItemReport(ExternalCourseReport):
 
         course_structure['step_variation'] = course_structure.groupby(['lesson_id', 'step_position']).cumcount()
         course_structure['step_variation'] += 1
-
-        submissions_filename = 'cache/course-{}-submissions.csv'.format(course_id)
-        if os.path.isfile(submissions_filename) and False:
-            submissions = pd.read_csv(submissions_filename)
-        else:
-            submissions = get_course_submissions(course_id, course_structure)
-            print(submissions['reply'])
-            submissions.to_csv(submissions_filename, index=False)
-        submissions = submissions[submissions.submission_time >= self.from_date]
-
-        submissions = pd.merge(submissions, course_structure, on='step_id')
-
-        item_statistics = self.perform_item_analysis(submissions, course_structure, cached)
-        option_statistics = self.perform_option_analysis(submissions, cached)
-        self.generate_latex_files(item_statistics, option_statistics, directory)
+        submissions = get_course_submissions(course_id, course_structure)
+        return submissions
 
     def perform_item_analysis(self, submissions, course_structure, cached=True):
         # item statistics

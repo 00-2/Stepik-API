@@ -14,8 +14,6 @@ from library.utils import (html2latex, create_answer_matrix, get_course_structur
                            get_item_statistics, get_question, process_step_url, process_options_with_name,
                            get_video_peaks, get_video_stats, get_unix_date, get_course_grades)
 
-COURSE_ID = 111634
-
 class ExternalCourseReport:
     default_project_folder = 'default'
     default_report_name = 'course-report'
@@ -74,7 +72,7 @@ class ItemReport(ExternalCourseReport):
     def __init__(self, course_id):
         self.course_id = course_id
     def generate_latex_report(self, directory, cached=False):
-        course_id = COURSE_ID
+        course_id = self.course_id
         course_info = fetch_objects('courses', pk=course_id)
         course_title = course_info[0]['title']
         course_url = '{}/course/{}'.format(API_HOST, course_id)

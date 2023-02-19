@@ -24,6 +24,9 @@
                     Q{{ i }}
                 </th>
             {% endfor %}
+            <th>
+                final Score
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -31,10 +34,16 @@
             <tr>
                 <th>{{ contestant }}</th>
                 {% for score in marks[contestant] %}
-                    <th> {{ score }} </th>
+
+                    {% if '-' == score['submission_time'] %}
+                        <th> {{ score['score'] }} </th>
+                    {% else %}
+                        <th> {{ score['score'] }} {{ score['submission_time'] }} </th>
+                    {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
+
     </tbody>
 </table>
 

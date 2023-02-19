@@ -17,6 +17,6 @@ Site will be available by ``*local-ip*:5000``
 or ``127.0.0.1:5000``
 
 **Note:** To change your course id:
-replace *111634* in api.py with *course_id*
+replace *111634* in app.py with *course_id*
 
 ``contest_table = itr.ContestTable(111634)``
